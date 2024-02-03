@@ -35,7 +35,7 @@ const Navigation = ({ user }) => {
                             <NavLink
                                 href="/dashboard"
                                 active={router.pathname === '/dashboard'}>
-                                Dashboard
+                                Home
                             </NavLink>
                         </div>
                     </div>
