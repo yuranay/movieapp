@@ -2,47 +2,34 @@ import AppLayout from '@/components/Layouts/AppLayout'
 import laravelAxios from '@/lib/laravelAxios'
 import {
     Box,
+    Button,
     Card,
     CardContent,
     Container,
+    Fab,
     Grid,
+    Modal,
     Rating,
+    TextareaAutosize,
+    Tooltip,
     Typography,
 } from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import AddIcon from '@mui/icons-material/Add'
 
 const Detail = ({ detail, media_type, media_id }) => {
-    const reviews = [
-        {
-            id: 1,
-            content: 'おもしろかった',
-            rating: 4,
+    const [reviews, setReviews] = useState([])
+    const [open, setOpen] = useState(false)
 
-            user: {
-                name: '山田花子',
-            },
-        },
-        {
-            id: 2,
-            content: '最悪',
-            rating: 1,
+    const handleOpen = () => {
+        setOpen(true)
+    }
 
-            user: {
-                name: '田島秀樹',
-            },
-        },
-        {
-            id: 3,
-            content: '普通',
-            rating: 3,
-
-            user: {
-                name: '仙波良治',
-            },
-        },
-    ]
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -169,6 +156,53 @@ const Detail = ({ detail, media_type, media_id }) => {
                     ))}
                 </Grid>
             </Container>
+
+            {/* レビュー追加ボタン */}
+            <Box
+                sx={{
+                    position: 'fixed',
+                    bottom: '16px',
+                    right: '16px',
+                    zIndex: 5,
+                }}>
+                <Tooltip title="レビュー追加">
+                    <Fab
+                        style={{ background: 'blue', color: 'white' }}
+                        onClick={handleOpen}>
+                        <AddIcon />
+                    </Fab>
+                </Tooltip>
+            </Box>
+
+            {/* モーダルウィンドウ */}
+            <Modal open={open} onClose={handleClose}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                    }}>
+                    <Typography variant="h6" component="h2">
+                        レビューを書く
+                    </Typography>
+
+                    <Rating required />
+                    <TextareaAutosize
+                        required
+                        minRows={5}
+                        placeholder="レビュー内容"
+                        style={{ width: '100%', marginTop: '10px' }}
+                    />
+
+                    <Button variant="outlined">送信</Button>
+                </Box>
+            </Modal>
         </AppLayout>
     )
 }
