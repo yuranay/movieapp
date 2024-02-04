@@ -45,6 +45,19 @@ const Detail = ({ detail, media_type, media_id }) => {
 
     const isDisabled = !rating || !review.trim()
 
+    const handleReviewAdd = async () => {
+        try {
+            const response = await laravelAxios.post('api/reviews', {
+                content: review,
+                rating: rating,
+                media_type: media_type,
+                media_id: media_id,
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const reviews = [
         {
             id: 1,
@@ -250,7 +263,10 @@ const Detail = ({ detail, media_type, media_id }) => {
                         value={review}
                     />
 
-                    <Button variant="outlined" disabled={isDisabled}>
+                    <Button
+                        variant="outlined"
+                        disabled={isDisabled}
+                        onClick={handleReviewAdd}>
                         送信
                     </Button>
                 </Box>
