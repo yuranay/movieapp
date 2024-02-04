@@ -1,4 +1,8 @@
+import AppLayout from '@/components/Layouts/AppLayout'
+import Layout from '@/components/Layouts/Layout'
+import Sidebar from '@/components/Sidebar'
 import axios from 'axios'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -35,7 +39,19 @@ const search = () => {
 
         fetchMedia()
     }, [searchQuery])
-    return <div>search</div>
+    return (
+        <AppLayout
+            header={
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    Search
+                </h2>
+            }>
+            <Head>
+                <title>Laravel - Search</title>
+            </Head>
+            <Layout sidebar={<Sidebar />}>test</Layout>
+        </AppLayout>
+    )
 }
 
 export default search
