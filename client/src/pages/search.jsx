@@ -1,6 +1,8 @@
 import AppLayout from '@/components/Layouts/AppLayout'
 import Layout from '@/components/Layouts/Layout'
+import MediaCard from '@/components/MediaCard'
 import Sidebar from '@/components/Sidebar'
+import { Grid } from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -49,7 +51,11 @@ const search = () => {
             <Head>
                 <title>Laravel - Search</title>
             </Head>
-            <Layout sidebar={<Sidebar />}>test</Layout>
+            <Layout sidebar={<Sidebar />}>
+                <Grid container spacing={3}>
+                    <MediaCard />
+                </Grid>
+            </Layout>
         </AppLayout>
     )
 }
