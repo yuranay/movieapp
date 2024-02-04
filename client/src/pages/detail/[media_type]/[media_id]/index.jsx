@@ -1,11 +1,62 @@
 import AppLayout from '@/components/Layouts/AppLayout'
-import { Box, Container, Grid, Typography } from '@mui/material'
+import laravelAxios from '@/lib/laravelAxios'
+import {
+    Box,
+    Card,
+    CardContent,
+    Container,
+    Grid,
+    Rating,
+    Typography,
+} from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const Detail = ({ detail, media_type }) => {
-    console.log(detail)
+const Detail = ({ detail, media_type, media_id }) => {
+    const reviews = [
+        {
+            id: 1,
+            content: 'おもしろかった',
+            rating: 4,
+
+            user: {
+                name: '山田花子',
+            },
+        },
+        {
+            id: 2,
+            content: '最悪',
+            rating: 1,
+
+            user: {
+                name: '田島秀樹',
+            },
+        },
+        {
+            id: 3,
+            content: '普通',
+            rating: 3,
+
+            user: {
+                name: '仙波良治',
+            },
+        },
+    ]
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await laravelAxios.get(
+                    `api/reviews/${media_type}/${media_id}`,
+                )
+                console.log(response.data)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        fetchReviews
+    }, [media_type, media_id])
 
     return (
         <AppLayout
@@ -82,6 +133,42 @@ const Detail = ({ detail, media_type }) => {
                     </Grid>
                 </Container>
             </Box>
+
+            {/* レビュー内容表示 */}
+            <Container sx={{ py: 4 }}>
+                <Typography
+                    component={'h1'}
+                    variant="h4"
+                    align="center"
+                    gutterBottom>
+                    レビュー一覧
+                </Typography>
+                <Grid container spacing={3}>
+                    {reviews.map(review => (
+                        <Grid item xs={12} key={review.id}>
+                            <Card>
+                                <CardContent>
+                                    <Typography
+                                        variant="h6"
+                                        component={'div'}
+                                        gutterBottom>
+                                        {review.user.name}
+                                    </Typography>
+
+                                    <Rating value={review.rating} readOnly />
+
+                                    <Typography
+                                        variant="body2"
+                                        color="textSecondary"
+                                        paragraph>
+                                        {review.content}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
         </AppLayout>
     )
 }
