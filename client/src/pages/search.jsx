@@ -8,11 +8,15 @@ const search = () => {
     console.log(searchQuery)
 
     useEffect(() => {
+        if (!searchQuery) {
+            return
+        }
         const fetchMedia = async () => {
             try {
                 const response = await axios.get(
                     `api/searchMedia?searchQuery=${searchQuery}`,
                 )
+                console.log(response)
             } catch (err) {
                 console.log(err)
             }
