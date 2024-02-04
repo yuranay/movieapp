@@ -9,10 +9,12 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 const search = () => {
+    const [category, setCategory] = useState('all')
     const [results, setResults] = useState([])
     const router = useRouter()
     const { query: searchQuery } = router.query
-    console.log(searchQuery)
+
+    console.log(category)
 
     useEffect(() => {
         if (!searchQuery) {
@@ -31,9 +33,7 @@ const search = () => {
                     item =>
                         item.media_type == 'movie' || item.media_type == 'tv',
                 )
-                console.log(validResults)
                 setResults(validResults)
-                console.log(results)
             } catch (err) {
                 console.log(err)
             }
@@ -41,6 +41,16 @@ const search = () => {
 
         fetchMedia()
     }, [searchQuery])
+
+    const filterdResults = results.filter(results => {
+        if (category == 'all') {
+            return true
+        }
+
+        return results.media_type === category
+    })
+
+    console.log(filterdResults)
     return (
         <AppLayout
             header={
@@ -51,7 +61,7 @@ const search = () => {
             <Head>
                 <title>Laravel - Search</title>
             </Head>
-            <Layout sidebar={<Sidebar />}>
+            <Layout sidebar={<Sidebar setCategory={setCategory} />}>
                 <Grid container spacing={3}>
                     <MediaCard />
                 </Grid>
