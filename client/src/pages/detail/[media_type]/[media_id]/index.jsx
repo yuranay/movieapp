@@ -30,6 +30,9 @@ const Detail = ({ detail, media_type, media_id }) => {
     const [averageRating, setAverageRating] = useState(null)
     const { user } = useAuth({ middleware: 'auth' })
     console.log(user)
+    const [editMode, setEditMode] = useState(null)
+    const [editedRating, setEditedRating] = useState(0)
+    const [editedContent, setEditedContent] = useState('')
 
     const handleOpen = () => {
         setOpen(true)
@@ -109,6 +112,18 @@ const Detail = ({ detail, media_type, media_id }) => {
                 console.log(err)
             }
         }
+    }
+
+    //編集ボタンの処理
+    const handleEdit = review => {
+        setEditMode(review.id)
+        setEditedRating(review.rating)
+        setEditedContent(review.content)
+    }
+
+    //編集確定時の処理
+    const handleConfirmEdit = reviewId => {
+        console.log(reviewId)
     }
 
     useEffect(() => {
@@ -245,21 +260,49 @@ const Detail = ({ detail, media_type, media_id }) => {
                         <Grid item xs={12} key={review.id}>
                             <Card>
                                 <CardContent>
+                                    {/* ユーザー名 */}
                                     <Typography
                                         variant="h6"
                                         component={'div'}
                                         gutterBottom>
                                         {review.user.name}
                                     </Typography>
-
-                                    <Rating value={review.rating} readOnly />
-
-                                    <Typography
-                                        variant="body2"
-                                        color="textSecondary"
-                                        paragraph>
-                                        {review.content}
-                                    </Typography>
+                                    {editMode === review.id ? (
+                                        <>
+                                            {/* 編集ボタンを押されたレビューの見た目 */}
+                                            <Rating
+                                                value={editedRating}
+                                                onChange={(e, newValue) =>
+                                                    setEditedRating(newValue)
+                                                }
+                                            />
+                                            <TextareaAutosize
+                                                minRows={3}
+                                                style={{ width: '100%' }}
+                                                value={editedContent}
+                                                onChange={e =>
+                                                    setEditedContent(
+                                                        e.target.value,
+                                                    )
+                                                }
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {/* 星の数 */}
+                                            <Rating
+                                                value={review.rating}
+                                                readOnly
+                                            />
+                                            {/* レビュー内容 */}
+                                            <Typography
+                                                variant="body2"
+                                                color="textSecondary"
+                                                paragraph>
+                                                {review.content}
+                                            </Typography>
+                                        </>
+                                    )}
 
                                     {user?.id === review.user.id && (
                                         <Grid
@@ -267,16 +310,39 @@ const Detail = ({ detail, media_type, media_id }) => {
                                                 display: 'flex',
                                                 justifyContent: 'flex-end',
                                             }}>
-                                            <ButtonGroup>
-                                                <Button>編集</Button>
+                                            {editMode === review.id ? (
+                                                //編集中の表示
                                                 <Button
-                                                    color="error"
                                                     onClick={() =>
-                                                        handleDelete(review.id)
+                                                        handleConfirmEdit(
+                                                            review.id,
+                                                        )
                                                     }>
-                                                    削除
+                                                    編集確定
                                                 </Button>
-                                            </ButtonGroup>
+                                            ) : (
+                                                <>
+                                                    <ButtonGroup>
+                                                        <Button
+                                                            onClick={() =>
+                                                                handleEdit(
+                                                                    review,
+                                                                )
+                                                            }>
+                                                            編集
+                                                        </Button>
+                                                        <Button
+                                                            color="error"
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    review.id,
+                                                                )
+                                                            }>
+                                                            削除
+                                                        </Button>
+                                                    </ButtonGroup>
+                                                </>
+                                            )}
                                         </Grid>
                                     )}
                                 </CardContent>
