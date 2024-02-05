@@ -52,7 +52,12 @@ const Detail = ({ detail, media_type, media_id }) => {
         console.log(rating)
     }
 
-    const isDisabled = !rating || !review.trim()
+    const isButtonDisabled = (rating, content) => {
+        return !rating || !content.trim()
+    }
+
+    const isReviewButtonDisabled = isButtonDisabled(rating, review)
+    const isEditButtonDisabled = isButtonDisabled(editedRating, editedContent)
 
     const handleReviewAdd = async () => {
         handleClose()
@@ -122,8 +127,16 @@ const Detail = ({ detail, media_type, media_id }) => {
     }
 
     //編集確定時の処理
-    const handleConfirmEdit = reviewId => {
+    const handleConfirmEdit = async reviewId => {
         console.log(reviewId)
+        try {
+            const response = await laravelAxios.put(`api/reviews/${reviewId}`, {
+                content: editedContent,
+                rating: editedRating,
+            })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     useEffect(() => {
@@ -317,6 +330,9 @@ const Detail = ({ detail, media_type, media_id }) => {
                                                         handleConfirmEdit(
                                                             review.id,
                                                         )
+                                                    }
+                                                    disabled={
+                                                        isEditButtonDisabled
                                                     }>
                                                     編集確定
                                                 </Button>
@@ -403,7 +419,7 @@ const Detail = ({ detail, media_type, media_id }) => {
 
                     <Button
                         variant="outlined"
-                        disabled={isDisabled}
+                        disabled={isReviewButtonDisabled}
                         onClick={handleReviewAdd}>
                         送信
                     </Button>
