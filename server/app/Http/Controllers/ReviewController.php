@@ -85,6 +85,8 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        //
+        $review->delete();
+
+        return response()->json(["message" => "正常にレビューを削除しました"]);
     }
 }

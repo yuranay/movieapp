@@ -3,6 +3,7 @@ import laravelAxios from '@/lib/laravelAxios'
 import {
     Box,
     Button,
+    ButtonGroup,
     Card,
     CardContent,
     Container,
@@ -86,6 +87,17 @@ const Detail = ({ detail, media_type, media_id }) => {
             setAverageRating(average)
 
             console.log(average)
+        }
+    }
+
+    const handleDelete = async id => {
+        console.log(id)
+
+        try {
+            const response = await laravelAxios.delete(`api/review/${id}`)
+            console.log(response)
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -238,6 +250,23 @@ const Detail = ({ detail, media_type, media_id }) => {
                                         paragraph>
                                         {review.content}
                                     </Typography>
+
+                                    <Grid
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'flex-end',
+                                        }}>
+                                        <ButtonGroup>
+                                            <Button>編集</Button>
+                                            <Button
+                                                color="error"
+                                                onClick={() =>
+                                                    handleDelete(review.id)
+                                                }>
+                                                削除
+                                            </Button>
+                                        </ButtonGroup>
+                                    </Grid>
                                 </CardContent>
                             </Card>
                         </Grid>
