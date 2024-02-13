@@ -130,10 +130,28 @@ const Detail = ({ detail, media_type, media_id }) => {
     const handleConfirmEdit = async reviewId => {
         console.log(reviewId)
         try {
-            const response = await laravelAxios.put(`api/reviews/${reviewId}`, {
+            const response = await laravelAxios.put(`api/review/${reviewId}`, {
                 content: editedContent,
                 rating: editedRating,
             })
+
+            const updatedReview = response.data
+
+            const updatedReviews = reviews.map(review => {
+                if (review.id === reviewId) {
+                    return {
+                        ...review,
+                        content: updatedReview.content,
+                        rating: updatedReview.rating,
+                    }
+                }
+                return review
+            })
+
+            setReviews(updatedReviews)
+
+            console.log(updatedReviews)
+            setEditMode(null)
         } catch (err) {
             console.log(err)
         }
