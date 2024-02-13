@@ -21,6 +21,7 @@ import React, { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import StarIcon from '@mui/icons-material/Star'
 import { useAuth } from '@/hooks/auth'
+import Link from 'next/link'
 
 const Detail = ({ detail, media_type, media_id }) => {
     const [open, setOpen] = useState(false)
@@ -326,12 +327,15 @@ const Detail = ({ detail, media_type, media_id }) => {
                                                 readOnly
                                             />
                                             {/* レビュー内容 */}
-                                            <Typography
-                                                variant="body2"
-                                                color="textSecondary"
-                                                paragraph>
-                                                {review.content}
-                                            </Typography>
+                                            <Link
+                                                href={`/detail/${media_type}/${media_id}/review/${review.id}`}>
+                                                <Typography
+                                                    variant="body2"
+                                                    color="textSecondary"
+                                                    paragraph>
+                                                    {review.content}
+                                                </Typography>
+                                            </Link>
                                         </>
                                     )}
 
