@@ -61,6 +61,9 @@ const ReviewDetail = () => {
                 review_id: reviewId,
             })
             console.log(response.data)
+            const newComment = response.data
+            setComments([...comments, newComment])
+            setContent('')
         } catch (err) {
             console.log(err)
         }
@@ -144,7 +147,10 @@ const ReviewDetail = () => {
                         </Box>
 
                         {/* コメント */}
-                        <CommentList comments={comments} />
+                        <CommentList
+                            comments={comments}
+                            setComments={setComments}
+                        />
                     </>
                 ) : (
                     <div>Loading...</div>
