@@ -8,12 +8,12 @@ import {
 } from '@mui/material'
 import React from 'react'
 
-const Comment = () => {
+const Comment = ({ comment }) => {
     return (
         <Card>
             <CardContent>
                 <Typography variant="h6" component="div" gutterBottom>
-                    ユーザー名
+                    {comment.user.name}
                 </Typography>
 
                 <Typography
@@ -22,7 +22,7 @@ const Comment = () => {
                     component="p"
                     gutterBottom
                     paragraph>
-                    コメント内容
+                    {comment.content}
                 </Typography>
 
                 <Grid container justifyContent="flex-end">
