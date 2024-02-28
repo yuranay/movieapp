@@ -32,10 +32,10 @@ const Detail = ({ detail, media_type, media_id }) => {
     const [reviews, setReviews] = useState([])
     const [averageRating, setAverageRating] = useState(null)
     const { user } = useAuth({ middleware: 'auth' })
-    console.log(user)
     const [editMode, setEditMode] = useState(null)
     const [editedRating, setEditedRating] = useState(0)
     const [editedContent, setEditedContent] = useState('')
+    const [isFavorited, setIsFavorited] = useState(false)
 
     const handleOpen = () => {
         setOpen(true)
@@ -167,6 +167,7 @@ const Detail = ({ detail, media_type, media_id }) => {
                 media_id: media_id,
             })
             console.log(response.data)
+            setIsFavorited(response.data.status === 'added')
         } catch (err) {
             console.log(err)
         }
@@ -257,11 +258,12 @@ const Detail = ({ detail, media_type, media_id }) => {
                             <Typography paragraph>{detail.overview}</Typography>
 
                             <IconButton
+                                onClick={handleToggleFavorite}
                                 style={{
-                                    color: 'white',
+                                    color: isFavorited ? 'red' : 'white',
                                     background: '#0d253f',
                                 }}>
-                                <FavoriteIcon onClick={handleToggleFavorite} />
+                                <FavoriteIcon />
                             </IconButton>
 
                             <Box
