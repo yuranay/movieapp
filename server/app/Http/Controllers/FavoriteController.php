@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
+    public function index()
+    {
+        $api_key = config('services.tmdb.api_key');
+        $user = Auth::user();
+        $favorites = $user->favorites;
+
+        return response()->json($favorites);
+    }
+
     public function toggleFavorite(Request $request)
     {
         $validatedData = $request->validate([
@@ -34,5 +43,20 @@ class FavoriteController extends Controller
 
             return response()->json(["status" => "added"]);
         }
+    }
+
+    public function checkFavoriteStatus(Request $request)
+    {
+        $validatedData = $request->validate([
+            "media_type" => 'required|string',
+            "media_id" => 'required|integer',
+        ]);
+
+        $isFavorite = Favorite::where('user_id', Auth::id())
+            ->where('media_type', $validatedData['media_type'])
+            ->where('media_id', $validatedData['media_id'])
+            ->exists();
+
+        return response()->json($isFavorite);
     }
 }
