@@ -32,6 +32,7 @@ Route::get('/review/{review}', [ReviewController::class, 'show']);
 //コメント機能
 Route::post('/comments', [CommentController::class, 'store']);
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+Route::put('/comments/{comment}', [CommentController::class, 'update']);
 
 //お気に入り機能
 Route::get('/favorites', [FavoriteController::class, 'index']);
